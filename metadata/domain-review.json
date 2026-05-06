@@ -1,0 +1,73 @@
+{
+  "repo": "cellvm-c",
+  "language": "C",
+  "category": "Interpreters",
+  "goal": "Evaluate spreadsheet-style expressions with dependency diagnostics.",
+  "review_model": {
+    "terms": [
+      "opcode pressure",
+      "stack movement",
+      "runtime guard",
+      "trace depth"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "opcode pressure",
+      "signal": 70,
+      "slack": 36,
+      "drag": 26,
+      "confidence": 90,
+      "score": 188,
+      "lane": "ship"
+    },
+    {
+      "name": "stress",
+      "focus": "stack movement",
+      "signal": 82,
+      "slack": 27,
+      "drag": 23,
+      "confidence": 56,
+      "score": 178,
+      "lane": "ship"
+    },
+    {
+      "name": "edge",
+      "focus": "runtime guard",
+      "signal": 86,
+      "slack": 31,
+      "drag": 10,
+      "confidence": 47,
+      "score": 220,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "trace depth",
+      "signal": 74,
+      "slack": 27,
+      "drag": 25,
+      "confidence": 83,
+      "score": 183,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "opcode pressure",
+      "signal": 80,
+      "slack": 24,
+      "drag": 17,
+      "confidence": 79,
+      "score": 212,
+      "lane": "ship"
+    }
+  ]
+}

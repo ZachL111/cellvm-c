@@ -1,68 +1,40 @@
 # cellvm-c
 
-`cellvm-c` is a focused C codebase around evaluate spreadsheet-style expressions with dependency diagnostics. It is meant to be easy to inspect, run, and extend without a hosted service.
+`cellvm-c` is a compact C repository for interpreters, centered on this goal: Evaluate spreadsheet-style expressions with dependency diagnostics.
 
-## Cellvm C Walkthrough
+## Use Case
 
-I would read the project from the outside in: command, fixture, model, then roadmap. That keeps the interpreters idea grounded in files that can be checked locally.
+This is intentionally local and self-contained so it can be inspected without credentials, services, or seeded history.
 
-## How It Is Put Together
+## Cellvm C Review Notes
 
-The interesting part is the boundary between accepted and reviewed scenarios. Extended examples sit near that boundary so future edits can show whether the model became more permissive or more cautious. The C implementation keeps headers, source, and assertions separate so bounds and types are easy to review.
+Start with `runtime guard` and `stack movement`. Those cases create the widest score spread in this repo, so they are the best quick check when the model changes.
 
-## Reason For The Project
+## Highlights
 
-The repository exists to keep a technical idea small enough to reason about. The implementation avoids external dependencies where possible, then uses fixtures to make changes easy to review.
+- `fixtures/domain_review.csv` adds cases for opcode pressure and stack movement.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/cellvm-c-walkthrough.md` walks through the case spread.
+- The C code includes a review path for `runtime guard` and `stack movement`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Capabilities
+## Code Layout
 
-- Uses fixture data to keep stack state changes visible in code review.
-- Includes extended examples for runtime checks, including `surge` and `degraded`.
-- Documents trace output tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
-- Stores project constants and verification metadata in `metadata/project.json`.
+The repository has two validation layers: the original compact policy fixture and the domain review fixture. They are separate so one can change without hiding failures in the other.
 
-## Data Notes
+The C code keeps the review rule close to the tests.
 
-`recovery` is the first example I would inspect because it lands on the `accept` path with a score of 186. The broader file also keeps `degraded` at -22 and `surge` at 217, which gives the model a useful low-to-high spread.
-
-## Where Things Live
-
-- `src`: primary implementation
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
-
-## Getting It Running
-
-Use a normal shell with C available on `PATH`. The verifier is written as a PowerShell script because the portfolio was assembled on Windows.
-
-## Command Examples
+## Run The Check
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Regression Path
 
-## Check The Work
+That command is also the regression path. It verifies the domain cases and catches mismatches between the CSV, metadata, and code.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
+## Future Work
 
-The audit command checks repository structure and README constraints before it delegates to the verifier.
-
-## Tradeoffs
-
-This code is local-first. It makes no claim about deployed usage and avoids credentials, hosted state, and environment-specific setup.
-
-## Possible Extensions
-
-- Add a short report command that prints the score breakdown for a single scenario.
-- Add malformed input fixtures so the failure path is as visible as the happy path.
-- Split the scoring constants into a typed configuration object and validate it before use.
-- Add one more interpreters fixture that focuses on a malformed or borderline input.
+The repository is intentionally scoped to local checks. I would expand it by adding adversarial fixtures before adding features.
