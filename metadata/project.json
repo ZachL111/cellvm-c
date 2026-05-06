@@ -1,0 +1,32 @@
+{
+  "index": 82,
+  "phase": 1,
+  "batch": 10,
+  "name": "cellvm-c",
+  "planned_name": "cellvm-c",
+  "language": "C",
+  "category": "Interpreters",
+  "goal": "Evaluate spreadsheet-style expressions with dependency diagnostics.",
+  "repository_url": "https://github.com/ZachL111/cellvm-c",
+  "verification_command": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1",
+  "model": {
+    "inputs": [
+      "demand",
+      "capacity",
+      "latency",
+      "risk",
+      "weight"
+    ],
+    "threshold": 159,
+    "risk_penalty": 5,
+    "latency_penalty": 3,
+    "weight_bonus": 2,
+    "decision_rule": "accept when score is greater than or equal to threshold, otherwise review"
+  },
+  "quality_gates": [
+    "readme constraint scan",
+    "fixture presence check",
+    "metadata JSON parse",
+    "language verifier"
+  ]
+}
